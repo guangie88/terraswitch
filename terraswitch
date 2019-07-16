@@ -2,7 +2,7 @@
 set -euo pipefail
 
 function assert_exist {
-    if ! which "$1" >/dev/null; then
+    if ! command -v "$1" >/dev/null; then
         >&2 printf "This script needs \"%s\" to work!\n" "$1"
         exit 2
     fi
@@ -68,20 +68,20 @@ else
 fi
 
 # Terraform
-if ! which terraform_${TF_VERSION} >/dev/null; then
+if ! command -v terraform_${TF_VERSION} >/dev/null; then
     curl -LO https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_${OS}_${ARCH}.zip
     unzip terraform_${TF_VERSION}_${OS}_${ARCH}.zip
     mv terraform "${BIN_DIR}/terraform_${TF_VERSION}"
     rm terraform_${TF_VERSION}_${OS}_${ARCH}.zip
 fi
-cp "$(which terraform_${TF_VERSION})" "${BIN_DIR}/terraform"
+cp "$(command -v terraform_${TF_VERSION})" "${BIN_DIR}/terraform"
 
 # Terragrunt
-if ! which terragrunt_${TG_VERSION} >/dev/null; then
+if ! command -v terragrunt_${TG_VERSION} >/dev/null; then
     curl -LO https://github.com/gruntwork-io/terragrunt/releases/download/v${TG_VERSION}/terragrunt_${OS}_${ARCH}
     chmod +x terragrunt_${OS}_${ARCH}
     mv terragrunt_${OS}_${ARCH} "${BIN_DIR}/terragrunt_${TG_VERSION}"
 fi
-cp "$(which terragrunt_${TG_VERSION})" "${BIN_DIR}/terragrunt"
+cp "$(command -v terragrunt_${TG_VERSION})" "${BIN_DIR}/terragrunt"
 
 echo "Switched to terraform v${TF_VERSION} and terragrunt v${TG_VERSION}!"
