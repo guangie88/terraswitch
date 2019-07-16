@@ -17,5 +17,4 @@ steps:
     stage: test
     image: koalaman/shellcheck:v0.6.0
     working_directory: ${{main_clone}}
-    commands:
-    - terraswitch
+    cmd: terraswitch
