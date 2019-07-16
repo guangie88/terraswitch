@@ -4,7 +4,14 @@ set -euo pipefail
 function assert_exist {
     if ! which "$1" >/dev/null; then
         >&2 printf "This script needs \"%s\" to work!\n" "$1"
-        exit 1
+        exit 2
+    fi
+}
+
+function assert_can_write {
+    if [ ! -w "$1" ]; then
+        >&2 printf "Current user cannot write into dir \"%s\".\nEither run with sudo, or override BIN_DIR to a user-writable dir.\n" "$1"
+        exit 3
     fi
 }
 
@@ -13,6 +20,8 @@ function print_usage {
 }
 
 # Main
+BIN_DIR=${BIN_DIR:-/usr/local/bin}
+assert_can_write "${BIN_DIR}"
 
 assert_exist curl
 assert_exist unzip
@@ -62,17 +71,17 @@ fi
 if ! which terraform_${TF_VERSION} >/dev/null; then
     curl -LO https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_${OS}_${ARCH}.zip
     unzip terraform_${TF_VERSION}_${OS}_${ARCH}.zip
-    sudo mv terraform /usr/local/bin/terraform_${TF_VERSION}
+    mv terraform "${BIN_DIR}/terraform_${TF_VERSION}"
     rm terraform_${TF_VERSION}_${OS}_${ARCH}.zip
 fi
-sudo cp "$(which terraform_${TF_VERSION})" /usr/local/bin/terraform
+cp "$(which terraform_${TF_VERSION})" "${BIN_DIR}/terraform"
 
 # Terragrunt
 if ! which terragrunt_${TG_VERSION} >/dev/null; then
     curl -LO https://github.com/gruntwork-io/terragrunt/releases/download/v${TG_VERSION}/terragrunt_${OS}_${ARCH}
     chmod +x terragrunt_${OS}_${ARCH}
-    sudo mv terragrunt_${OS}_${ARCH} /usr/local/bin/terragrunt_${TG_VERSION}
+    mv terragrunt_${OS}_${ARCH} "${BIN_DIR}/terragrunt_${TG_VERSION}"
 fi
-sudo cp "$(which terragrunt_${TG_VERSION})" /usr/local/bin/terragrunt
+cp "$(which terragrunt_${TG_VERSION})" "${BIN_DIR}/terragrunt"
 
 echo "Switched to terraform v${TF_VERSION} and terragrunt v${TG_VERSION}!"

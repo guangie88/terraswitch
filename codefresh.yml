@@ -1,0 +1,22 @@
+version: '1.0'
+stages:
+- clone
+- test
+
+steps:
+  main_clone:
+    title: Clone main repository
+    type: git-clone
+    stage: clone
+    git: github
+    repo: ${{CF_REPO_OWNER}}/${{CF_REPO_NAME}}
+    revision: ${{CF_REVISION}}
+
+  test:
+    title: Run shellcheck
+    stage: test
+    image: koalaman/shellcheck:v0.6.0
+    working_directory: ${{main_clone}}
+    environment:
+    commands:
+    - shellcheck terraswitch
