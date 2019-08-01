@@ -16,7 +16,7 @@ function assert_can_write {
 }
 
 function print_usage {
-    >&2 printf "Usage: %s (11|12)\nChoose either between Terraform version v0.11 or v0.12\n" "$(basename "$0")"
+    >&2 printf "Usage: %s (0.11|0.12)\nChoose either between Terraform version v0.11 or v0.12\n" "$(basename "$0")"
 }
 
 # Main
@@ -37,8 +37,8 @@ if [ "$1" = "0.11" ]; then
     TF_VERSION=0.11.14
     TG_VERSION=0.18.7
 elif [ "$1" = "0.12" ]; then
-    TF_VERSION=0.12.4
-    TG_VERSION=0.19.8
+    TF_VERSION=0.12.6
+    TG_VERSION=0.19.14
 else
     print_usage
     exit 1
