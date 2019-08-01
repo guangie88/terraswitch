@@ -5,7 +5,7 @@
 Contains script to download and switch between terraform 0.11 and 0.12. Also
 fetches for corresponding compatible `terragrunt` binary.
 
-# Download into `/usr/local/bin`
+## Download into `/usr/local/bin`
 
 This assumes `/usr/local/bin` is in `PATH`, and also assumes user requires
 `sudo` to perform the below action.
